@@ -2,13 +2,12 @@
 
 The official documentation for DMCA services API.
 Use the API to 
-- register an account
-- create a dmca takedown case
-- list your dmca takedown cases
+- [register an account](https://github.com/dmca-services/api/wiki/Register)
+- [create a dmca takedown case](https://github.com/dmca-services/api/wiki/CreateCase)
+- [list your dmca takedown cases](https://github.com/dmca-services/api/wiki/ListCases)
+- [register an affiliate account](https://github.com/dmca-services/api/wiki/CreateACAccount-(Affiliate-Child))
+- [create DIY cases](https://github.com/dmca-services/api/wiki/CreateCase)
 - get a new badge id
-- register an affiliate account
-- create and manage watermareker tokens
-- create DIY cases
 
 ## Usage Requirements
 
