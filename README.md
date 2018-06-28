@@ -16,3 +16,27 @@ You must have an active account at https://www.dmca.com?r=ghapi
 ## Documentation
 
 See the [API docs](https://github.com/dmca-services/api/wiki).
+
+
+## API JS Example
+
+<pre> function newRegistration(firstName, lastName, companyName, email, callBack) {
+                var data = {
+                        "FirstName": firstName,
+                        "LastName": lastName,
+                        "CompanyName": companyName,
+                        "Email": email
+                    };
+                $.ajax({
+                    type: "POST",
+                    contentType: 'application/json; charset=utf-8',
+                    url: "https://api.dmca.com/register",
+                    data: JSON.stringify(data),
+                    dataType: "json",
+                    crossDomain: true,
+                    context: this,
+                    success: function (response) {
+                        if (typeof callBack !== 'undefined') { callBack(response); }
+                    }
+                });
+            }</pre>
