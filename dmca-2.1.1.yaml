@@ -1,10 +1,10 @@
 openapi: 3.0.1
 info:
   title: DMCA API
-  description: "This is the documentation for dmca services API. You can create a\
-    \ free account at dmca.com for use with many of these API calls.You can also use\
-    \ any existing DMCA account.\n\n[Visit DMCA.com for access to this API ](https://www.dmca.com?api)\
-    \ \n"
+  description: "This is the documentation for dmca services API. You can create a
+     free account at dmca.com for use with many of these API calls.You can also use
+     any existing DMCA account.\n\n[Visit DMCA.com for access to this API ](https://www.dmca.com?api)
+     "
   termsOfService: https://www.dmca.com/TermsOfService
   version: 2.1.1
 servers:
