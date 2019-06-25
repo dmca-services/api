@@ -1,5 +1,5 @@
 # DMCA.com [![DMCA API](https://images.dmca.com/Badges/dmca-badge-w200-5x1-04.png)](https://www.dmca.com)
-
+See the [API docs](https://app.swaggerhub.com/apis-docs/dmca/dmca-api/2.1.1).
 The official documentation for DMCA services API.
 Use the API to 
 - [register an account](https://app.swaggerhub.com/apis-docs/dmca/dmca-api/2.1.1#/Public%20API/%2Fregister%2Fpost)
