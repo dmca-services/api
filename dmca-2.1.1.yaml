@@ -1,0 +1,751 @@
+openapi: 3.0.1
+info:
+  title: DMCA API
+  description: "This is the documentation for dmca services API. You can create a\
+    \ free account at dmca.com for use with many of these API calls.You can also use\
+    \ any existing DMCA account.\n\n[Visit DMCA.com for access to this API ](https://www.dmca.com?api)\
+    \ \n"
+  termsOfService: https://www.dmca.com/TermsOfService
+  version: 2.1.1
+servers:
+- url: https://api.dmca.com
+tags:
+- name: Public API
+  description: Common API methods for using DMCA services
+  externalDocs:
+    description: Find out more
+    url: https://www.dmca.com/?r=oasapi
+- name: DMCA Takedowns Public API
+  description: CRUD Operations for DMCA Cases
+  externalDocs:
+    description: Find out more
+    url: https://www.dmca.com/takedowns.aspx?r=oasapi
+- name: DMCA DIY Cases
+  description: CRUD Operations for do-it-yourself (DIY cases - not managed or processed)
+  externalDocs:
+    description: Find out more
+    url: https://www.dmca.com/ProtectionPro.aspx#DIYCaseManagement?r=oasapi
+- name: DMCA Compliance API
+  description: CRUD Operations for DMCA Compliance
+  externalDocs:
+    description: Find out more
+    url: https://www.dmca.com/compliant.aspx?r=oasapi
+- name: DMCA Badges
+  description: Management and CRUD Operations for DMCA Badge related services
+  externalDocs:
+    description: Find out more
+    url: https://www.dmca.com/badges.aspx
+- name: DMCA.com Affiliate
+  description: Common API methods for using DMCA services
+  externalDocs:
+    description: Find out more
+    url: https://www.dmca.com/Affiliates/Signup.aspx?r=oasapi
+- name: DMCA Site Report
+  description: Common API methods for using DMCA services
+  externalDocs:
+    description: Find out more
+    url: https://www.dmca.com/?r=oasapi
+paths:
+  /register:
+    post:
+      tags:
+      - Public API
+      summary: register a new user for dmca.com and this API
+      description: Registers a new dmca.com user and returns a badge ID. A confirmation
+        email will be sent to the email provided with login instructions.
+      operationId: /register/post
+      requestBody:
+        description: create a new child object under your account
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/newUserObj'
+        required: true
+      responses:
+        200:
+          description: Success operation
+        401:
+          description: Failed operation
+      security:
+      - apikeyQuery: []
+  /login:
+    post:
+      tags:
+      - Public API
+      summary: login to the DMCA.com API
+      description: Logs you in with standard email and password credentials, returns
+        a token for use in API calls. Please make sure you're only doing this in the
+        !!BODY!! with !!HTTPS only!!. HTTPS is MANDATORY.
+      operationId: /login/post
+      requestBody:
+        description: create a new child object under your account
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/loginObj'
+        required: true
+      responses:
+        200:
+          description: Success operation
+        401:
+          description: Failed operation
+      security:
+      - apikeyQuery: []
+  /createCase:
+    post:
+      tags:
+      - DMCA Takedowns Public API
+      summary: Creates a new takedown case and returns a case ID
+      description: Creates a Takedown case to be processed by DMCA.com, the user that's
+        creating the case will get a case creation email notice
+      operationId: /createCase/post
+      parameters:
+      - name: Token
+        in: header
+        description: Security token from Login method or from API section of DMCA.com
+          website
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: create a new dmca takedown case object under your account
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/createCaseObj'
+        required: true
+      responses:
+        200:
+          description: Success operation - Returns Case ID
+        429:
+          description: Failed request - Rate limit exceeded
+      security:
+      - apikeyQuery: []
+  /updateCase:
+    post:
+      tags:
+      - DMCA Takedowns Public API
+      summary: Updates an existing takedown case and returns a case ID
+      description: Updates an existing case object. Max 100 executions per day (email
+        api@dmca.com to have limit increased) Parameter names are case sensitive
+      operationId: /updateCase/post
+      parameters:
+      - name: Token
+        in: header
+        description: Security token from Login method or from API section of DMCA.com
+          website
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: create a new dmca takedown case object under your account
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/updateCaseObj'
+        required: true
+      responses:
+        200:
+          description: Success operation - Returns Case ID
+      security:
+      - apikeyQuery: []
+  /listCases:
+    get:
+      tags:
+      - DMCA Takedowns Public API
+      summary: gets a list of account cases
+      description: Returns a list of takedown cases associated with the account
+      operationId: /listCases/get
+      parameters:
+      - name: Token
+        in: header
+        description: Security token from Login method or from API section of DMCA.com
+          website
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: page
+        in: query
+        description: allows for paging through result set, max results is 50 per page.
+          i.e. page=3
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: number
+      responses:
+        200:
+          description: Success operation - Returns list of cases
+      security:
+      - apikeyQuery: []
+  /getCaseById:
+    get:
+      tags:
+      - DMCA Takedowns Public API
+      - DMCA Compliance API
+      - DMCA DIY Cases
+      summary: gets a case by its ID, must be owned by the API users account
+      description: Returns a single case object
+      operationId: /getCaseById/get
+      parameters:
+      - name: Token
+        in: header
+        description: Security token from Login method or from API section of DMCA.com
+          website
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: id
+        in: query
+        description: case the ID that's returned by listCases or createCase method
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: Success operation - Returns the requested case object
+        404:
+          description: Failed operation - Case not found
+      security:
+      - apikeyQuery: []
+  /listDIYCases:
+    get:
+      tags:
+      - DMCA DIY Cases
+      summary: Gets a list of DIY cases on your account
+      description: Returns a list of takedown cases associated with the account
+      operationId: /listDIYCases/get
+      parameters:
+      - name: Token
+        in: header
+        description: Security token from Login method or from API section of DMCA.com
+          website
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: page
+        in: query
+        description: allows for paging through result set, max results is 50 per page.
+          i.e. page=3
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: number
+      responses:
+        200:
+          description: Success operation - Returns list of cases
+      security:
+      - apikeyQuery: []
+  /createDIYCase:
+    post:
+      tags:
+      - DMCA DIY Cases
+      summary: Creates a new DIY takedown case
+      description: Creates a new DIY Case and returns its ID (A free do it yourself
+        takedown case). This will not be reviewed, processed or sent anywhere.
+      operationId: /createDIYCase/post
+      parameters:
+      - name: Token
+        in: header
+        description: Security token from Login method or from API section of DMCA.com
+          website
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: create a new DIY case object under your account
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/createDIYCaseObj'
+        required: true
+      responses:
+        200:
+          description: Success operation - Returns Case ID
+      security:
+      - apikeyQuery: []
+  /createComplianceCase:
+    post:
+      tags:
+      - DMCA Compliance API
+      summary: Creates a new compliance case for site specified
+      description: On Accounts with compliance case submission services enabled this
+        method will add a case to the compliance list on the site owners account.
+        The site must have this service enabled.
+      operationId: /createComplianceCase/post
+      requestBody:
+        description: create a new compliance case under the site id provided
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/complianceCaseObj'
+        required: true
+      responses:
+        200:
+          description: Success operation - Returns Case ID. Case creation email will
+            be sent
+      security:
+      - apikeyQuery: []
+  /listComplianceCases:
+    get:
+      tags:
+      - DMCA Compliance API
+      summary: Gets a list of Compliance cases
+      description: Returns a list of takedown cases associated with the account
+      operationId: /listComplianceCases/get
+      parameters:
+      - name: Token
+        in: header
+        description: Security token from Login method or from API section of DMCA.com
+          website
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: page
+        in: query
+        description: allows for paging through result set, max results is 50 per page.
+          i.e. page=3
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: number
+      responses:
+        200:
+          description: Success operation - Returns list of cases
+      security:
+      - apikeyQuery: []
+  /queuePage:
+    get:
+      tags:
+      - DMCA Badges
+      summary: Queue a page to be scanned
+      description: Queue a page to scanned
+      operationId: /queuePage/get
+      parameters:
+      - name: id
+        in: query
+        description: badge id
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: refurl
+        in: query
+        description: url to be scanned. should include https:// or http://
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: Success operation
+      security:
+      - apikeyQuery: []
+  /getRegisteredBadges:
+    get:
+      tags:
+      - DMCA Badges
+      summary: Get DMCA badge embed codes
+      description: Use this to generate badge codes for a given badge / account
+      operationId: /getRegisteredBadges/get
+      parameters:
+      - name: AccountID
+        in: query
+        description: badge or account id
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: Success operation
+      security:
+      - apikeyQuery: []
+  /registerAffiliate:
+    post:
+      tags:
+      - DMCA.com Affiliate
+      summary: Registers a child account
+      description: Creates a new affiliate / child account and returns the new child
+        account username and pw. Child account will be emailed to confirm
+      operationId: /registerAffiliate/post
+      parameters:
+      - name: Token
+        in: header
+        description: Security token from Login method or from API section of DMCA.com
+          website
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: create a new child object under your account
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/newChildObj'
+        required: true
+      responses:
+        200:
+          description: Success operation
+        401:
+          description: Failed operation
+      security:
+      - apikeyQuery: []
+  /listAffiliates:
+    get:
+      tags:
+      - DMCA.com Affiliate
+      summary: Returns list of child accounts
+      description: Returns a list of affiliate under your account
+      operationId: /listAffiliates/get
+      parameters:
+      - name: page
+        in: query
+        description: allows for paging through result set, max results is 50 per page.
+          i.e. page=3
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: number
+      - name: Token
+        in: header
+        description: Security token from Login method or from API section of DMCA.com
+          website
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        200:
+          description: Success operation - Returns list of affiliates
+      security:
+      - apikeyQuery: []
+  /getAffiliateStats:
+    get:
+      tags:
+      - DMCA.com Affiliate
+      summary: Returns commission report
+      description: Returns a breakdown of orders that have come in, what will be paid
+        or whats owed
+      operationId: /getAffiliateStats/get
+      parameters:
+      - name: Token
+        in: header
+        description: Security token from Login method or from API section of DMCA.com
+          website
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: page
+        in: query
+        description: allows for paging through result set, max results is 50 per page.
+          i.e. page=3
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: number
+      responses:
+        200:
+          description: Success operation - Returns list of affiliates
+      security:
+      - apikeyQuery: []
+  /resetChildPw:
+    post:
+      tags:
+      - DMCA.com Affiliate
+      summary: Reset and resend the pw of a child account
+      description: This operation will reset and resend a new PW to a child account.
+        It will first verify that the child account belongs to the corresponding security
+        token
+      operationId: /resetChildPw/post
+      parameters:
+      - name: Token
+        in: header
+        description: Security token from Login method or from API section of DMCA.com
+          website
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: email address of the child account  to have its password reset
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/emailObj'
+        required: true
+      responses:
+        200:
+          description: Success operation
+        401:
+          description: Failed operation
+      security:
+      - apikeyQuery: []
+  /enableProtectionPro:
+    post:
+      tags:
+      - DMCA.com Affiliate
+      summary: Enable Protection Pro on affiliate/child account
+      description: This operation will enable protection pro on the account specified.
+        They will receive a welcome email that will direct them into the dmca.com
+        dashboard.
+      operationId: /enableProtectionPro/post
+      parameters:
+      - name: childAccountId
+        in: query
+        description: account id of the child account to be upgraded
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: Token
+        in: header
+        description: Security token from Login method or from API section of DMCA.com
+          website
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        200:
+          description: Success operation
+        401:
+          description: Failed operation
+      security:
+      - apikeyQuery: []
+  /disableProtectionPro:
+    post:
+      tags:
+      - DMCA.com Affiliate
+      summary: Disable Protection Pro on affiliate/child account
+      description: This operation will disable protection pro on the account specified.
+      operationId: /disableProtectionPro/post
+      parameters:
+      - name: childAccountId
+        in: query
+        description: account id of the child account to be upgraded
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: Token
+        in: header
+        description: Security token from Login method or from API section of DMCA.com
+          website
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        200:
+          description: Success operation
+        401:
+          description: Failed operation
+      security:
+      - apikeyQuery: []
+  /getSiteReport/{domain}:
+    get:
+      tags:
+      - DMCA Site Report
+      summary: Returns a single site report object
+      description: Returns a single site report object. If the site report (profile)
+        for the given domain doesn't exist, the base record will be created but will
+        still need to be claimed, validated etc. to be edited.
+      operationId: /getSiteReport/{domain}
+      parameters:
+      - name: domain
+        in: path
+        description: the fully qualified domain name of the site report
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        200:
+          description: Success operation
+components:
+  schemas:
+    createCaseObj:
+      type: object
+      properties:
+        subject:
+          type: string
+        description:
+          type: string
+        copiedFromUrl:
+          type: string
+        infringingUrl:
+          type: string
+        infringingSiteIp:
+          type: string
+      xml:
+        name: createCaseObj
+    createDIYCaseObj:
+      type: object
+      properties:
+        subject:
+          type: string
+        description:
+          type: string
+        copiedFromUrl:
+          type: string
+        infringingUrl:
+          type: string
+        infringingSiteIp:
+          type: string
+        type:
+          type: string
+          enum:
+          - Business - General
+          - Personal - General
+          - Toolkit Business Request CAN
+          - Toolkit Business Request EU
+          - Toolkit Personal Request CAN
+          - Toolkit Personal Request EU
+          - Toolkit Personal Request India
+          - Toolkit Business Request India
+      xml:
+        name: createCaseObj
+    updateCaseObj:
+      type: object
+      properties:
+        case_id:
+          type: string
+        status:
+          type: string
+        subject:
+          type: string
+        description:
+          type: string
+        copiedFromUrl:
+          type: string
+        infringingUrl:
+          type: string
+        infringingSiteIp:
+          type: string
+        priority:
+          type: string
+      xml:
+        name: updateCaseObj
+    complianceCaseObj:
+      type: object
+      properties:
+        submitterEmail:
+          type: string
+        submitterFirstName:
+          type: string
+        submitterLastName:
+          type: string
+        submitterCompanyName:
+          type: string
+        description:
+          type: string
+        copiedFromUrl:
+          type: string
+        infringingUrl:
+          type: string
+        infringingSiteIp:
+          type: string
+        siteId:
+          type: string
+          description: id of the site the case is being submitted to. (note the site
+            owner must have this feature enabled)
+      xml:
+        name: complianceCaseObj
+    newChildObj:
+      type: object
+      properties:
+        FirstName:
+          type: string
+        LastName:
+          type: string
+        ClientEmail:
+          type: string
+          description: New clients email
+          example: john@dmca.com
+        CompanyName:
+          type: string
+        AffiliateToken:
+          type: string
+          description: 10 digit affiliate token
+      xml:
+        name: newChildObj
+    newUserObj:
+      type: object
+      properties:
+        FirstName:
+          type: string
+        LastName:
+          type: string
+        Email:
+          type: string
+          description: email address. (will be emailed to validate)
+          example: john@dmca.com
+        CompanyName:
+          type: string
+        mpi:
+          type: string
+          description: Main Product Interest
+          enum:
+          - Protection Pro
+          - DMCA Takedowns
+          - DMCA Compliance
+      xml:
+        name: newUserObj
+    loginObj:
+      type: object
+      properties:
+        email:
+          type: string
+          example: john@dmca.com
+        password:
+          type: string
+      xml:
+        name: loginObj
+    emailObj:
+      type: object
+      properties:
+        ClientEmail:
+          type: string
+          example: john@dmca.com
+      xml:
+        name: emailObj
+  securitySchemes:
+    apikeyQuery:
+      type: apiKey
+      name: Token
+      in: header
