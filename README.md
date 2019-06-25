@@ -2,11 +2,12 @@
 
 The official documentation for DMCA services API.
 Use the API to 
-- [register an account](https://github.com/dmca-services/api/wiki/Register)
-- [create a dmca takedown case](https://github.com/dmca-services/api/wiki/CreateCase)
-- [list your dmca takedown cases](https://github.com/dmca-services/api/wiki/ListCases)
-- [register an affiliate account](https://github.com/dmca-services/api/wiki/CreateACAccount-(Affiliate-Child))
-- [create DIY cases](https://github.com/dmca-services/api/wiki/CreateCase)
+- [register an account](https://app.swaggerhub.com/apis-docs/dmca/dmca-api/2.1.1#/Public%20API/%2Fregister%2Fpost)
+- [login to API and get your token](https://app.swaggerhub.com/apis-docs/dmca/dmca-api/2.1.1#/Public%20API/%2Flogin%2Fpost)
+- [create a dmca takedown case](https://app.swaggerhub.com/apis-docs/dmca/dmca-api/2.1.1#/DMCA%20Takedowns%20Public%20API/%2FcreateCase%2Fpost)
+- [list your dmca takedown cases](https://app.swaggerhub.com/apis-docs/dmca/dmca-api/2.1.1#/DMCA%20Takedowns%20Public%20API/%2FlistCases%2Fget)
+- [register an affiliate account](https://app.swaggerhub.com/apis-docs/dmca/dmca-api/2.1.1#/DMCA.com%20Affiliate/%2FregisterAffiliate%2Fpost)
+- [create DIY cases](https://app.swaggerhub.com/apis-docs/dmca/dmca-api/2.1.1#/DMCA%20DIY%20Cases/%2FcreateDIYCase%2Fpost)
 - get a new badge id
 
 ## Usage Requirements
@@ -15,7 +16,7 @@ You must have an active account at https://www.dmca.com?r=ghapi
 
 ## Documentation
 
-See the [API docs](https://github.com/dmca-services/api/wiki).
+See the [API docs](https://app.swaggerhub.com/apis-docs/dmca/dmca-api/2.1.1).
 
 
 ## API JS Example
